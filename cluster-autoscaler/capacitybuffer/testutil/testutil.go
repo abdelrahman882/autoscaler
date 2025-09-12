@@ -55,12 +55,14 @@ func GetPodTemplateRefBuffer(podTemplateRef *v1.LocalObjectRef, replicas *int32)
 			Percentage:           nil,
 			Limits:               nil,
 		},
-		Status: *GetBufferStatus(nil, nil, nil),
+		Status: *GetBufferStatus(nil, nil, nil, nil),
 	}
 }
 
 // GetBuffer returns a capacity buffer with the passed attributes, should be used for testing purposes only
-func GetBuffer(strategy *string, podTemplateRef *v1.LocalObjectRef, replicas *int32, podTempRef *v1.LocalObjectRef, statusReplicas *int32, conditions []metav1.Condition) *v1.CapacityBuffer {
+func GetBuffer(strategy *string, podTemplateRef *v1.LocalObjectRef, replicas *int32, statusPodTempRef *v1.LocalObjectRef,
+	statusReplicas *int32, podTemplateGeneration *int64, conditions []metav1.Condition,
+	limits *v1.ResourceList) *v1.CapacityBuffer {
 	return &v1.CapacityBuffer{
 		Spec: v1.CapacityBufferSpec{
 			ProvisioningStrategy: strategy,
@@ -68,18 +70,18 @@ func GetBuffer(strategy *string, podTemplateRef *v1.LocalObjectRef, replicas *in
 			ScalableRef:          nil,
 			Replicas:             replicas,
 			Percentage:           nil,
-			Limits:               nil,
+			Limits:               limits,
 		},
-		Status: *GetBufferStatus(podTempRef, statusReplicas, conditions),
+		Status: *GetBufferStatus(statusPodTempRef, statusReplicas, podTemplateGeneration, conditions),
 	}
 }
 
 // GetBufferStatus returns a buffer status with the passed attributes, should be used for testing purposes only
-func GetBufferStatus(podTempRef *v1.LocalObjectRef, replicas *int32, conditions []metav1.Condition) *v1.CapacityBufferStatus {
+func GetBufferStatus(podTempRef *v1.LocalObjectRef, replicas *int32, podTemplateGeneration *int64, conditions []metav1.Condition) *v1.CapacityBufferStatus {
 	return &v1.CapacityBufferStatus{
 		PodTemplateRef:        podTempRef,
 		Replicas:              replicas,
-		PodTemplateGeneration: nil,
+		PodTemplateGeneration: podTemplateGeneration,
 		Conditions:            conditions,
 	}
 }

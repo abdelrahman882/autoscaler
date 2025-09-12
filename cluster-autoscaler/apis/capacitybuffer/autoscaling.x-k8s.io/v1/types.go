@@ -95,6 +95,8 @@ type ScalableRef struct {
 type ResourceList map[ResourceName]resource.Quantity
 
 // CapacityBufferSpec defines the desired state of CapacityBuffer.
+// +kubebuilder:validation:XValidation:rule="!has(self.podTemplateRef) || has(self.replicas) || has(self.limits)",message="If X is set, replicas or limits must also be set"
+// +kubebuilder:validation:XValidation:rule="!(has(self.PodTemplateRef) && has(self.ScalableRef))",message="You must define both PodTemplateRef and ScalableRef"
 type CapacityBufferSpec struct {
 	// ProvisioningStrategy defines how the buffer is utilized.
 	// "buffer.x-k8s.io/active-capacity" is the default strategy, where the buffer actively scales up the cluster by creating placeholder pods.

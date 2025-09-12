@@ -43,13 +43,13 @@ func (f *combinedFilter) AddFilter(filter Filter) {
 
 // Filter runs sub-filters sequentially
 func (f *combinedFilter) Filter(buffers []*v1.CapacityBuffer) ([]*v1.CapacityBuffer, []*v1.CapacityBuffer) {
-	var totalFilteredOutBuffers []*v1.CapacityBuffer
+	var toBeProcessedBuffers []*v1.CapacityBuffer
 	for _, buffersFilter := range f.filters {
-		updatedBuffersList, filteredOutBuffers := buffersFilter.Filter(buffers)
-		buffers = updatedBuffersList
-		totalFilteredOutBuffers = append(totalFilteredOutBuffers, filteredOutBuffers...)
+		filteredToBeProcessed, filteredOut := buffersFilter.Filter(buffers)
+		buffers = filteredOut
+		toBeProcessedBuffers = append(toBeProcessedBuffers, filteredToBeProcessed...)
 	}
-	return buffers, totalFilteredOutBuffers
+	return toBeProcessedBuffers, buffers
 }
 
 // CleanUp cleans up the filter's internal structures.
