@@ -227,6 +227,8 @@ var (
 	enableDynamicResourceAllocation              = flag.Bool("enable-dynamic-resource-allocation", false, "Whether logic for handling DRA (Dynamic Resource Allocation) objects is enabled.")
 	clusterSnapshotParallelism                   = flag.Int("cluster-snapshot-parallelism", 16, "Maximum parallelism of cluster snapshot creation.")
 	checkCapacityProcessorInstance               = flag.String("check-capacity-processor-instance", "", "Name of the processor instance. Only ProvisioningRequests that define this name in their parameters with the key \"processorInstance\" will be processed by this CA instance. It only refers to check capacity ProvisioningRequests, but if not empty, best-effort atomic ProvisioningRequests processing is disabled in this instance. Not recommended: Until CA 1.35, ProvisioningRequests with this name as prefix in their class will be also processed.")
+	capacitybufferControllerEnabled              = flag.Bool("capacity-buffer-controller-enabled", false, "Whether to enable the default controller for capacity buffers or not")
+	capacitybufferPodInjectionEnabled            = flag.Bool("capacity-buffer-pod-injection-enabled", false, "Whether to enable pod list processor that processes ready capacity buffers and injects fake pods accordingly")
 
 	// Deprecated flags
 	ignoreTaintsFlag = multiStringFlag("ignore-taint", "Specifies a taint to ignore in node templates when considering to scale a node group (Deprecated, use startup-taints instead)")
@@ -408,6 +410,8 @@ func createAutoscalingOptions() config.AutoscalingOptions {
 		NodeInfoCacheExpireTime:                      *nodeInfoCacheExpireTime,
 		ProactiveScaleupEnabled:                      *proactiveScaleupEnabled,
 		PodInjectionLimit:                            *podInjectionLimit,
+		CapacitybufferControllerEnabled:              *capacitybufferControllerEnabled,
+		CapacitybufferPodInjectionEnabled:            *capacitybufferPodInjectionEnabled,
 	}
 }
 

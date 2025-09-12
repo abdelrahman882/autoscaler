@@ -342,6 +342,10 @@ type AutoscalingOptions struct {
 	ProactiveScaleupEnabled bool
 	// PodInjectionLimit limits total number of pods while injecting fake pods.
 	PodInjectionLimit int
+	//CapacitybufferControllerEnabled tells if CA should run default capacity buffer as sub-process or not
+	CapacitybufferControllerEnabled bool
+	// CapacitybufferPodInjectionEnabled tells if CA should injects fake pods for capacity buffers that are ready for provisioning
+	CapacitybufferPodInjectionEnabled bool
 }
 
 // KubeClientOptions specify options for kube client
